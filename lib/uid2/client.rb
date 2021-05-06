@@ -13,30 +13,66 @@ module Uid2
       self.base_url ||= 'https://integ.uidapi.com/v1/'
     end
 
-    def generate_token(params)
-      http.get('token/generate', params)
+    def generate_token(email: nil, email_hash: nil)
+      raise ArgumentError, 'Either email or email_hash needs to be provided' if email.nil? && email_hash.nil?
+
+      # As stated in doc, if email and email_hash are both supplied in the same request,
+      # only the email will return a mapping response.
+      params = unless email.empty?
+                 { email: email }
+               else
+                 { email_hash: email_hash }
+               end
+      http.get('token/generate', params).body
     end
 
-    def validate_token(params)
-      http.get('token/validate', params)
+    def validate_token(token:, email: nil, email_hash: nil)
+      raise ArgumentError, 'Either email or email_hash needs to be provided' if email.nil? && email_hash.nil?
+      params = unless email.empty?
+                 { email: email }
+               else
+                 { email_hash: email_hash }
+               end
+
+      http.get('token/validate', params.merge(token: token)).body
     end
 
-    def refresh_token(token)
-      http.get('token/refresh', { refresh_token: token })
+    def refresh_token(refresh_token:)
+      http.get('token/refresh', { refresh_token: refresh_token }).body
     end
 
-    def get_salt_buckets(since = Time.now)
+    def get_salt_buckets(since: Time.now)
       # By default, Ruby's iso8601 generates timezone parts (`T`)
       # which needs to be removed for UID2 APIs
-      http.get('identity/buckets', since_timestamp: since.utc.iso8601[0..-2])
+      http.get('identity/buckets', since_timestamp: since.utc.iso8601[0..-2]).body
     end
 
-    def generate_identifier(params)
-      http.get('identity/map', params)
+    def generate_identifier(email: nil, email_hash: nil)
+      raise ArgumentError, 'Either email or email_hash needs to be provided' if email.nil? && email_hash.nil?
+
+      # As stated in doc, if email and email_hash are both supplied in the same request,
+      # only the email will return a mapping response.
+      params = unless email.empty?
+                 { email: email }
+               else
+                 { email_hash: email_hash }
+               end
+
+      http.get('identity/map', params).body
     end
 
-    def batch_generate_identifier(params)
-      http.post('identity/map', params)
+    def batch_generate_identifier(email: nil, email_hash: nil)
+      raise ArgumentError, 'Either email or email_hash needs to be provided' if email.nil? && email_hash.nil?
+
+      # As stated in doc, if email and email_hash are both supplied in the same request,
+      # only the email will return a mapping response.
+      params = unless email.empty?
+                 { email: Array(email) }
+               else
+                 { email_hash: Array(email_hash) }
+               end
+
+      http.post('identity/map', params).body
     end
 
     private
