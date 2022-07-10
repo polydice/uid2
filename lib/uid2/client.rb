@@ -8,7 +8,7 @@ require "time"
 
 module Uid2
   class Client
-    attr_accessor :bearer_token, :base_url
+    attr_accessor :bearer_token, :base_url, :secret_key
 
     def initialize(_options = {})
       yield(self) if block_given?
@@ -60,7 +60,7 @@ module Uid2
         headers: credentials
       ) do |f|
         f.request :json unless refresh_response_key
-        f.request :uid2_encryption, refresh_response_key || ENV["UID2_SECRET_KEY"], is_refresh
+        f.request :uid2_encryption, refresh_response_key || secret_key, is_refresh
         f.adapter :net_http_persistent
       end
     end
