@@ -3,15 +3,15 @@
 require_relative "lib/uid2/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "uid2"
-  spec.version       = Uid2::VERSION
-  spec.authors       = ["Richard Lee"]
-  spec.email         = ["14349+dlackty@users.noreply.github.com"]
+  spec.name = "uid2"
+  spec.version = Uid2::VERSION
+  spec.authors = ["Richard Lee"]
+  spec.email = ["14349+dlackty@users.noreply.github.com"]
 
-  spec.summary       = "Ruby API client for Unified ID 2.0"
-  spec.description   = spec.summary
-  spec.homepage      = "https://github.com/polydice/uid2"
-  spec.license       = "MIT"
+  spec.summary = "Ruby API client for Unified ID 2.0"
+  spec.description = spec.summary
+  spec.homepage = "https://github.com/polydice/uid2"
+  spec.license = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.7.0")
 
   spec.metadata["homepage_uri"] = spec.homepage

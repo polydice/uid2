@@ -21,10 +21,10 @@ module Uid2
       # As stated in doc, if email and email_hash are both supplied in the same request,
       # only the email will return a mapping response.
       params = if email.empty?
-                 { email_hash: email_hash }
-               else
-                 { email: email }
-               end
+        {email_hash: email_hash}
+      else
+        {email: email}
+      end
       http.get("token/generate", params).body
     end
 
@@ -32,16 +32,16 @@ module Uid2
       raise ArgumentError, "Either email or email_hash needs to be provided" if email.nil? && email_hash.nil?
 
       params = if email.empty?
-                 { email_hash: email_hash }
-               else
-                 { email: email }
-               end
+        {email_hash: email_hash}
+      else
+        {email: email}
+      end
 
       http.get("token/validate", params.merge(token: token)).body
     end
 
     def refresh_token(refresh_token:)
-      http.get("token/refresh", { refresh_token: refresh_token }).body
+      http.get("token/refresh", {refresh_token: refresh_token}).body
     end
 
     def get_salt_buckets(since: Time.now)
@@ -56,10 +56,10 @@ module Uid2
       # As stated in doc, if email and email_hash are both supplied in the same request,
       # only the email will return a mapping response.
       params = if email.empty?
-                 { email_hash: email_hash }
-               else
-                 { email: email }
-               end
+        {email_hash: email_hash}
+      else
+        {email: email}
+      end
 
       http.get("identity/map", params).body
     end
@@ -70,10 +70,10 @@ module Uid2
       # As stated in doc, if email and email_hash are both supplied in the same request,
       # only the email will return a mapping response.
       params = if email.empty?
-                 { email_hash: Array(email_hash) }
-               else
-                 { email: Array(email) }
-               end
+        {email_hash: Array(email_hash)}
+      else
+        {email: Array(email)}
+      end
 
       http.post("identity/map", params).body
     end
