@@ -53,7 +53,7 @@ module Faraday
           nonce = payload[8..15]
           raise Faraday::ParsingError.new("Nonce mismatch", env[:response]) if nonce != @nonce
 
-          payload[16..-1]
+          payload[16..]
         end
 
         env.response_headers["Content-Type"] = "application/json"

@@ -16,27 +16,15 @@ module Uid2
       self.base_url ||= "https://prod.uidapi.com/v2/"
     end
 
-    def generate_token(email: nil, email_hash: nil)
-      raise ArgumentError, "Either email or email_hash needs to be provided" if email.nil? && email_hash.nil?
-
-      # As stated in doc, if email and email_hash are both supplied in the same request,
-      # only the email will return a mapping response.
-      params = if email.empty?
-        {email_hash: email_hash}
-      else
-        {email: email}
-      end
+    def generate_token(email: nil, email_hash: nil, phone: nil, phone_hash: nil)
+      params = {email: email, email_hash: email_hash, phone: phone, phone_hash: phone_hash}.reject { |_, v| v.nil? }
+      raise ArgumentError, "One of the argument needs to be provided" if params.empty?
       http.post("token/generate", params).body
     end
 
-    def validate_token(token:, email: nil, email_hash: nil)
-      raise ArgumentError, "Either email or email_hash needs to be provided" if email.nil? && email_hash.nil?
-
-      params = if email.empty?
-        {email_hash: email_hash}
-      else
-        {email: email}
-      end
+    def validate_token(token:, email: nil, email_hash: nil, phone: nil, phone_hash: nil)
+      params = {email: email, email_hash: email_hash, phone: phone, phone_hash: phone_hash}.reject { |_, v| v.nil? }
+      raise ArgumentError, "One of the argument needs to be provided" if params.empty?
 
       http.post("token/validate", params.merge(token: token)).body
     end
@@ -51,16 +39,9 @@ module Uid2
       http.post("identity/buckets", since_timestamp: since.utc.iso8601[0..-2]).body
     end
 
-    def generate_identifier(email: nil, email_hash: nil)
-      raise ArgumentError, "Either email or email_hash needs to be provided" if email.nil? && email_hash.nil?
-
-      # As stated in doc, if email and email_hash are both supplied in the same request,
-      # only the email will return a mapping response.
-      params = if email.empty?
-        {email_hash: Array(email_hash)}
-      else
-        {email: Array(email)}
-      end
+    def generate_identifier(email: nil, email_hash: nil, phone: nil, phone_hash: nil)
+      params = {email: Array(email), email_hash: Array(email_hash), phone: Array(phone), phone_hash: Array(phone_hash)}.reject { |_, v| v.empty? }
+      raise ArgumentError, "One of the argument needs to be provided" if params.empty?
 
       http.post("identity/map", params).body
     end
