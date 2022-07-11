@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.2.1] - 2022-07-12
+
+- Fix middleware options compatibility and refactor
+
 ## [0.2.0] - 2022-07-11
 
 - Migrate to UID2 V2 API
