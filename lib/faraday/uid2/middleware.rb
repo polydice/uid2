@@ -7,11 +7,11 @@ require "hashie/mash"
 module Faraday
   module Uid2
     class Middleware < Faraday::Middleware
-      def initialize(app, secret_key, is_refresh, options = {})
-        super(app, options)
+      def initialize(app, options = {})
+        super(app)
 
-        @key = Base64.decode64(secret_key)
-        @is_refresh = is_refresh
+        @key = Base64.decode64(options.fetch(:secret_key))
+        @is_refresh = options.fetch(:is_refresh, false)
       end
 
       def call(request_env)

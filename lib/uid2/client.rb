@@ -30,7 +30,7 @@ module Uid2
     end
 
     def refresh_token(refresh_token:, refresh_response_key:)
-      http(is_refresh: true, refresh_response_key: refresh_response_key).post("token/refresh", refresh_token).body
+      http(refresh_response_key: refresh_response_key).post("token/refresh", refresh_token).body
     end
 
     def get_salt_buckets(since: Time.now)
@@ -54,13 +54,13 @@ module Uid2
       }
     end
 
-    def http(is_refresh: false, refresh_response_key: nil)
+    def http(refresh_response_key: nil)
       Faraday.new(
         url: base_url,
         headers: credentials
       ) do |f|
         f.request :json unless refresh_response_key
-        f.request :uid2_encryption, refresh_response_key || secret_key, is_refresh
+        f.request :uid2_encryption, {secret_key: (refresh_response_key || secret_key), is_refresh: !refresh_response_key.nil?}
         f.adapter :net_http_persistent
       end
     end
