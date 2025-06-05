@@ -19,7 +19,7 @@ This gem implements every Unified ID 2.0 APIs.
 To create a client:
 
 ```ruby
-client = Uid2::Client.new do |client|
+client = Uid2::Client.new do |c|
   c.bearer_token = "YOUR_TOKEN_HERE"
   c.secret_key = "YOUR_SECRET_KEY_HERE"
 end
